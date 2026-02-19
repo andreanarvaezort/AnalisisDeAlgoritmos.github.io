@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Libre+Baskerville:italic&family=Spectral:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>ANÁLISIS DE ALGORITMOS</title>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="nav-container">
+        <div class="logo-u-central">
+          <img
+            src="https://tja.ucb.edu.bo/wp-content/uploads/2020/09/logo-UCB.png"
+            alt="Logo U"
+            class="u-img"
+          />
+          <span class="u-nombre">ALGORITMOS</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#" onclick="mostrarSeccion('teoria')">INICIO</a></li>
+          <li><a href="#" onclick="mostrarSeccion('grafos')">GRAFOS</a></li>
+        </ul>
+      </div>
+      <hr class="nav-divider" />
+    </header>
+
+    <main class="content">
+      <section id="teoria" class="seccion-academia">
+        <header class="editorial-header">
+          <p class="fecha-post">Actualizado: 18 de Febrero, 2026</p>
+          <h1 class="titulo-articulo">La Elegancia de los Algoritmos</h1>
+          <hr class="linea-fina" />
+        </header>
+
+        <article class="cuerpo-texto">
+          <div class="bloque-mixto">
+            <div class="contenedor-foto izquierda vertical">
+              <img
+                src="https://cdn.cosmos.so/b2f70fa3-a1ea-4eeb-b9f8-ac1eda991cb0?format=webp&w=876"
+                alt="Estética antigua"
+              />
+              <p class="pie-foto">Fig 1. La estructura oculta en el caos.</p>
+            </div>
+            <p class="texto-contenido">
+              <span class="capitular">E</span>n el núcleo de cada proceso
+              computacional reside un algoritmo. No son solo líneas de código
+              frío, sino una serie de pasos lógicos diseñados para resolver
+              problemas complejos con la precisión de un relojero antiguo.
+              Analizar un algoritmo es, en esencia, estudiar la eficiencia del
+              pensamiento humano traducido al lenguaje de la máquina. Un
+              algoritmo eficiente es un procedimiento computacional diseñado
+              para resolver problemas optimizando recursos, específicamente
+              minimizando el tiempo de ejecución y el uso de memoria. Se
+              caracteriza por ser rápido, escalable y utilizar la menor cantidad
+              de memoria posible, a menudo evaluado mediante la complejidad
+              temporal y espacial (notación Big O).
+            </p>
+          </div>
+
+          <blockquote class="cita-academia">
+            "La complejidad es el enemigo de la ejecución; la simplicidad es el
+            alma de la eficiencia."
+          </blockquote>
+
+          <div class="bloque-vertical">
+            <p class="texto-contenido">
+              El análisis de algoritmos nos permite predecir el comportamiento
+              de una solución antes de que se ejecute. Evaluamos el tiempo y el
+              espacio, buscando siempre la optimización. Es aquí donde la teoría
+              de grafos entra en juego, permitiéndonos mapear relaciones que a
+              simple vista parecen invisibles.
+            </p>
+
+            <div class="contenedor-media-dual">
+              <div class="columna-media">
+                <div class="marco-vintage">
+                  <img
+                    src="https://images.unsplash.com/photo-1642952469120-eed4b65104be?fm=jpg&q=60&w=1200"
+                    alt="Diagrama Algoritmos"
+                  />
+                </div>
+                <p class="pie-foto">
+                  Fig 2. Relaciones complejas en sistemas simples.
+                </p>
+              </div>
+
+              <div class="columna-media">
+                <div class="marco-vintage">
+                  <div class="video-responsive">
+                    <iframe
+                      src="https://www.youtube.com/embed/f10jKIslSUY"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="
+                        accelerometer;
+                        autoplay;
+                        clipboard-write;
+                        encrypted-media;
+                        gyroscope;
+                        picture-in-picture;
+                        web-share;
+                      "
+                      allowfullscreen
+                    >
+                    </iframe>
+                  </div>
+                </div>
+                <p class="pie-foto">Video: Explicación de algoritmos.</p>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="subtitulo-editorial">
+            El Orden de la Complejidad (Big O)
+          </h2>
+
+          <div class="bloque-mixto">
+            <div class="texto-columna">
+              <p class="texto-contenido">
+                En este mundo académico, clasificamos los algoritmos según su
+                "hambre" de recursos. La notación Big O es nuestra escala de
+                medida para entender cómo escalan los problemas conforme crecen
+                los datos:
+              </p>
+              <ul class="lista-elegante">
+                <li>
+                  <strong>O(1) - Constante:</strong> La perfección inmediata, el
+                  tiempo de ejecución es independiente del tamaño de la entrada.
+                </li>
+                <li>
+                  <strong>O(log n) - Logarítmica:</strong> La eficiencia del
+                  buscador, como en la búsqueda binaria, el tiempo de ejecución
+                  crece lentamente con la entrada.
+                </li>
+                <li>
+                  <strong>O(n) - Lineal:</strong> Un paso por cada elemento,
+                  como recorrer una lista completa.
+                </li>
+                <li>
+                  <strong>O(n log n):</strong> Eficiencia de algoritmos de
+                  ordenación avanzados como Merge Sort.
+                </li>
+                <li>
+                  <strong>O(n²) - Cuadrática:</strong> El costo de las
+                  comparaciones profundas, típico de algoritmos de ordenación
+                  ineficientes como Bubble Sort.
+                </li>
+                <li>
+                  <strong>O(2^n) - Exponencial:</strong> Crece muy rápido, solo
+                  viable para entradas muy pequeñas.
+                </li>
+                <li>
+                  <strong>O(n!) - Factorial:</strong> El peor escenario,
+                  inviable para casi cualquier entrada.
+                </li>
+              </ul>
+            </div>
+            <div class="contenedor-foto derecha vertical">
+              <img
+                src="https://cdn.cosmos.so/e9c09e5a-457f-447f-9e78-f7c6e1776e3e?format=webp&w=876"
+                alt="Gráfica de Complejidad"
+              />
+              <p class="pie-foto">Fig 3. Visualización de la eficiencia.</p>
+            </div>
+          </div>
+
+          <h2 class="subtitulo-editorial">Conceptos Fundamentales</h2>
+
+          <div class="bloque-mixto">
+            <div class="contenedor-foto izquierda vertical">
+              <img
+                src="https://m.media-amazon.com/images/I/71S7+rDgB+L._AC_UF1000,1000_QL80_.jpg"
+                alt="Estructura de Datos Antigua"
+              />
+              <p class="pie-foto">
+                Fig 4. The story of numbers, symbols, and space (The Golden
+                library of knowledge).
+              </p>
+            </div>
+            <div class="texto-columna">
+              <p class="texto-contenido">
+                Para dominar el arte de la eficiencia, es crucial comprender
+                varios pilares:
+              </p>
+              <ul class="lista-elegante">
+                <li>
+                  <strong>Análisis Asintótico (Notación Big O):</strong> Más
+                  allá de O(n²), exploramos O(log n), O(n log n), e incluso las
+                  complejidades exponenciales y factoriales. Mide cómo escala un
+                  algoritmo con el tamaño de la entrada.
+                </li>
+                <li>
+                  <strong>Mejor, Peor y Caso Promedio:</strong> Aunque nos
+                  centramos en el peor caso para garantizar un límite superior
+                  de tiempo de ejecución y recursos, es útil conocer los otros
+                  escenarios.
+                </li>
+                <li>
+                  <strong>Estructuras de Datos Básicas:</strong> Comprender la
+                  manipulación de arreglos, listas enlazadas (simples, dobles,
+                  circulares), pilas (LIFO), colas (FIFO), árboles y grafos, y
+                  cómo cada una impacta en la eficiencia de las operaciones.
+                </li>
+                <li>
+                  <strong>Características de un Buen Algoritmo:</strong>
+                  <ul class="lista-subpuntos">
+                    <li>
+                      <strong>Corrección:</strong> Resuelve el problema de
+                      manera precisa.
+                    </li>
+                    <li>
+                      <strong>Finitud:</strong> Siempre termina en un número
+                      finito de pasos.
+                    </li>
+                    <li>
+                      <strong>Precisión:</strong> Cada paso está bien definido y
+                      es inequívoco.
+                    </li>
+                    <li>
+                      <strong>Eficiencia:</strong> Optimiza el uso de tiempo y
+                      espacio.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Algoritmos Clásicos:</strong>
+                  <ul class="lista-subpuntos">
+                    <li>
+                      <strong>Ordenación:</strong> Bubble Sort, Insertion Sort,
+                      Selection Sort (básicos pero ineficientes), Merge Sort,
+                      Quick Sort (eficientes para grandes volúmenes).
+                    </li>
+                    <li>
+                      <strong>Búsqueda:</strong> Búsqueda Lineal (simple),
+                      Búsqueda Binaria (eficiente en datos ordenados), Búsqueda
+                      en Grafos (DFS, BFS).
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="contenedor-boton">
+            <button class="boton-academia" onclick="mostrarSeccion('grafos')">
+              <span class="flecha">→</span> COMENZAR SIMULACIÓN
+              <span class="flecha">←</span>
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <section
+        id="grafos"
+        class="seccion-academia"
+        style="display: none; opacity: 0"
+      >
+        <header class="editorial-header">
+          <h1 class="titulo-articulo" style="text-align: center">
+            Simulación de Grafos
+          </h1>
+          <p class="fecha-post" style="text-align: center">
+            Doble clic: Crear Nodo | Arrastrar: Conectar | Shift + Clic:
+            Eliminar
+          </p>
+          <hr class="linea-fina" />
+        </header>
+
+        <div class="contenedor-canvas">
+          <canvas id="canvasGrafos"></canvas>
+        </div>
+
+        <div class="controles-grafos">
+          <button class="boton-academia" onclick="limpiarLienzo()">
+            LIMPIAR LIENZO
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

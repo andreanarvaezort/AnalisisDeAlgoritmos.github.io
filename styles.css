@@ -1,0 +1,398 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f4f0e6;
+  color: #2d2926;
+  font-family: "Spectral", serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 40px;
+}
+
+.navbar {
+  padding-top: 30px;
+}
+
+.nav-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 15px;
+}
+
+.logo-u-central {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.u-img {
+  height: 80px;
+  filter: grayscale(100%);
+  opacity: 0.9;
+}
+
+.u-nombre {
+  font-family: "Cormorant Garamond", serif;
+  letter-spacing: 6px;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 50px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #2d2926;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #839b8d;
+  font-style: italic;
+}
+
+.nav-divider {
+  border: none;
+  border-top: 1px solid #c5b499;
+  width: 70%;
+  margin: 0 auto;
+  opacity: 0.4;
+}
+
+.seccion-academia {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 20px;
+  transition: opacity 0.6s ease;
+}
+
+.editorial-header {
+  margin-bottom: 50px;
+}
+
+.titulo-articulo {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3.5rem;
+  font-weight: 400;
+  margin: 10px 0;
+}
+
+.linea-fina {
+  border-top: 1px solid #c5b499;
+  opacity: 0.3;
+}
+
+.texto-contenido {
+  flex: 2;
+  line-height: 1.6;
+}
+
+.bloque-mixto {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  margin-bottom: 60px;
+}
+
+.contenedor-foto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  position: relative;
+}
+
+.pie-foto {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #9a7e6f;
+  text-align: center;
+}
+
+.contenedor-foto.vertical img {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  border: 1px solid #c5b499;
+  padding: 8px;
+  background: #fff;
+  transition: transform 0.8s ease;
+}
+
+.contenedor-foto:hover img {
+  transform: scale(1.05);
+}
+
+.capitular {
+  float: left;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 5.5rem;
+  line-height: 0.7;
+  padding-right: 15px;
+  margin-top: 8px;
+  color: #9a7e6f;
+}
+
+.texto-contenido {
+  font-size: 3.5rem;
+  text-align: justify;
+}
+
+.bloque-vertical {
+  margin-bottom: 80px;
+}
+
+.contenedor-media-dual {
+  display: flex;
+  gap: 30px;
+  margin-top: 40px;
+  justify-content: space-between;
+}
+
+.columna-media {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.marco-vintage {
+  background: #fff;
+  border: 1px solid #c5b499;
+  padding: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.marco-vintage img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.video-responsive {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+
+.video-responsive iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pie-foto {
+  margin-top: 12px;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #9a7e6f;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .contenedor-media-dual {
+    flex-direction: column;
+  }
+}
+
+.cita-academia {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.8rem;
+  font-style: italic;
+  text-align: center;
+  margin: 80px 0;
+  padding: 40px;
+  border-top: 1px solid #c5b499;
+  border-bottom: 1px solid #c5b499;
+}
+
+.subtitulo-editorial {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2.8rem;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  color: #2d2926;
+  border-bottom: 1px solid #c5b499;
+  display: inline-block;
+}
+
+.bloque-mixto {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.texto-columna {
+  flex: 2;
+}
+
+.texto-contenido {
+  font-family: "Spectral", serif;
+  font-weight: 300;
+  font-size: 1.15rem;
+  text-align: justify;
+  margin-bottom: 15px;
+}
+
+.contenedor-foto {
+  flex: 1;
+  max-width: 250px;
+}
+
+.contenedor-foto img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #c5b499;
+  padding: 5px;
+  background: white;
+}
+
+.contenedor-foto:hover img {
+  transform: scale(1.05);
+}
+
+.pie-foto {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #9a7e6f;
+  text-align: center;
+}
+
+.lista-elegante {
+  list-style: none;
+  padding-left: 0;
+  margin: 10px 0;
+  font-size: 1.1rem;
+}
+
+.lista-elegante li {
+  font-family: "Spectral", serif;
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 25px;
+}
+
+.lista-elegante li::before {
+  content: "◈";
+  color: #c5b499;
+  position: absolute;
+  left: 0;
+  font-size: 0.9rem;
+}
+
+.lista-elegante li strong {
+  color: #333;
+}
+
+.lista-subpuntos {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.lista-subpuntos li {
+  font-family: "Libre Baskerville", serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #5a5550;
+  padding-left: 20px;
+}
+
+.lista-subpuntos li::before {
+  content: "•";
+  color: #839b8d;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .bloque-mixto {
+    flex-direction: column;
+    align-items: center;
+  }
+  .contenedor-foto {
+    margin-top: 30px;
+  }
+  .subtitulo-editorial {
+    font-size: 2rem;
+    padding-left: 15px;
+  }
+}
+
+.contenedor-boton {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.boton-academia {
+  background: none;
+  border: none;
+  border-bottom: 1px solid #c5b499;
+  padding: 15px 40px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.3rem;
+  letter-spacing: 5px;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.boton-academia:hover {
+  letter-spacing: 8px;
+  color: #839b8d;
+}
+
+.pie-foto {
+  font-family: "Libre Baskerville", serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
+  margin-top: 10px;
+  color: #9a7e6f;
+}
+
+.contenedor-canvas {
+  width: 100%;
+  height: 600px;
+  border: 1px solid #c5b499;
+  background-color: #fcfaf5;
+  box-shadow: inset 0 0 20px rgba(197, 180, 153, 0.2);
+  cursor: crosshair;
+  margin-bottom: 30px;
+}
+
+#canvasGrafos {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.controles-grafos {
+  text-align: center;
+  margin-bottom: 50px;
+}
