@@ -25,6 +25,12 @@
         <ul class="nav-links">
           <li><a href="#" onclick="mostrarSeccion('teoria')">INICIO</a></li>
           <li><a href="#" onclick="mostrarSeccion('grafos')">GRAFOS</a></li>
+          <li>
+            <a href="#" onclick="mostrarSeccion('matriz')"
+              >MATRIZ DE ADYACENCIA</a
+            >
+          </li>
+          <li><a href="#" onclick="mostrarSeccion('sobre-mi')">SOBRE MÍ</a></li>
         </ul>
       </div>
       <hr class="nav-divider" />
@@ -33,14 +39,14 @@
     <main class="content">
       <section id="teoria" class="seccion-academia">
         <header class="editorial-header">
-          <p class="fecha-post">Actualizado: 18 de Febrero, 2026</p>
+          <p class="fecha-post">Actualizado: 25 de Febrero, 2026</p>
           <h1 class="titulo-articulo">La Elegancia de los Algoritmos</h1>
           <hr class="linea-fina" />
         </header>
 
         <article class="cuerpo-texto">
           <div class="bloque-mixto">
-            <div class="contenedor-foto izquierda vertical">
+            <div class="contenedor-foto izquierda vertical foto-hero">
               <img
                 src="https://cdn.cosmos.so/b2f70fa3-a1ea-4eeb-b9f8-ac1eda991cb0?format=webp&w=876"
                 alt="Estética antigua"
@@ -107,8 +113,7 @@
                         web-share;
                       "
                       allowfullscreen
-                    >
-                    </iframe>
+                    ></iframe>
                   </div>
                 </div>
                 <p class="pie-foto">Video: Explicación de algoritmos.</p>
@@ -179,8 +184,7 @@
                 alt="Estructura de Datos Antigua"
               />
               <p class="pie-foto">
-                Fig 4. The story of numbers, symbols, and space (The Golden
-                library of knowledge).
+                Fig 4. The story of numbers, symbols, and space.
               </p>
             </div>
             <div class="texto-columna">
@@ -190,58 +194,24 @@
               </p>
               <ul class="lista-elegante">
                 <li>
-                  <strong>Análisis Asintótico (Notación Big O):</strong> Más
-                  allá de O(n²), exploramos O(log n), O(n log n), e incluso las
-                  complejidades exponenciales y factoriales. Mide cómo escala un
-                  algoritmo con el tamaño de la entrada.
+                  <strong>Análisis Asintótico (Notación Big O):</strong> Mide
+                  cómo escala un algoritmo con el tamaño de la entrada.
                 </li>
                 <li>
-                  <strong>Mejor, Peor y Caso Promedio:</strong> Aunque nos
-                  centramos en el peor caso para garantizar un límite superior
-                  de tiempo de ejecución y recursos, es útil conocer los otros
-                  escenarios.
+                  <strong>Mejor, Peor y Caso Promedio:</strong> Nos centramos en
+                  el peor caso para garantizar un límite superior.
                 </li>
                 <li>
-                  <strong>Estructuras de Datos Básicas:</strong> Comprender la
-                  manipulación de arreglos, listas enlazadas (simples, dobles,
-                  circulares), pilas (LIFO), colas (FIFO), árboles y grafos, y
-                  cómo cada una impacta en la eficiencia de las operaciones.
+                  <strong>Estructuras de Datos Básicas:</strong> Arreglos,
+                  listas enlazadas, pilas, colas, árboles y grafos.
                 </li>
                 <li>
                   <strong>Características de un Buen Algoritmo:</strong>
-                  <ul class="lista-subpuntos">
-                    <li>
-                      <strong>Corrección:</strong> Resuelve el problema de
-                      manera precisa.
-                    </li>
-                    <li>
-                      <strong>Finitud:</strong> Siempre termina en un número
-                      finito de pasos.
-                    </li>
-                    <li>
-                      <strong>Precisión:</strong> Cada paso está bien definido y
-                      es inequívoco.
-                    </li>
-                    <li>
-                      <strong>Eficiencia:</strong> Optimiza el uso de tiempo y
-                      espacio.
-                    </li>
-                  </ul>
+                  Corrección, Finitud, Precisión y Eficiencia.
                 </li>
                 <li>
-                  <strong>Algoritmos Clásicos:</strong>
-                  <ul class="lista-subpuntos">
-                    <li>
-                      <strong>Ordenación:</strong> Bubble Sort, Insertion Sort,
-                      Selection Sort (básicos pero ineficientes), Merge Sort,
-                      Quick Sort (eficientes para grandes volúmenes).
-                    </li>
-                    <li>
-                      <strong>Búsqueda:</strong> Búsqueda Lineal (simple),
-                      Búsqueda Binaria (eficiente en datos ordenados), Búsqueda
-                      en Grafos (DFS, BFS).
-                    </li>
-                  </ul>
+                  <strong>Algoritmos Clásicos:</strong> Ordenación (Merge,
+                  Quick, Bubble) y Búsqueda (Binaria, Lineal, DFS, BFS).
                 </li>
               </ul>
             </div>
@@ -265,23 +235,106 @@
           <h1 class="titulo-articulo" style="text-align: center">
             Simulación de Grafos
           </h1>
-          <p class="fecha-post" style="text-align: center">
-            Doble clic: Crear Nodo | Un clic: Conectar | Shift + Clic: Eliminar
-          </p>
           <hr class="linea-fina" />
         </header>
 
-        <div class="contenedor-canvas">
-          <canvas id="canvasGrafos"></canvas>
+        <div class="layout-grafos">
+          <aside class="nota-instrucciones">
+            <h3>Instrucciones</h3>
+            <ul>
+              <li><strong>Doble Clic:</strong> Crear Nodo</li>
+              <li><strong>Un Clic:</strong> Conectar Nodos</li>
+              <li><strong>Clic Derecho:</strong> Editar Nombre/Peso</li>
+              <li><strong>Ctrl+Shift+Clic:</strong> Borrar Elemento</li>
+            </ul>
+          </aside>
+          <div class="contenedor-canvas">
+            <canvas id="canvasGrafos"></canvas>
+          </div>
         </div>
 
         <div class="controles-grafos">
           <button class="boton-academia" onclick="limpiarLienzo()">
             LIMPIAR LIENZO
           </button>
+          <button class="boton-academia" onclick="mostrarSeccion('matriz')">
+            GENERAR MATRIZ
+          </button>
+        </div>
+      </section>
+
+      <section
+        id="matriz"
+        class="seccion-academia"
+        style="display: none; opacity: 0"
+      >
+        <header class="editorial-header">
+          <h1 class="titulo-articulo">Matriz de Adyacencia</h1>
+          <hr class="linea-fina" />
+        </header>
+        <div class="hoja-pergamino">
+          <div id="renderMatriz"></div>
+        </div>
+        <div class="controles-grafos">
+          <button class="boton-academia" onclick="abrirModalJSON()">
+            VER/EXPORTAR JSON
+          </button>
+          <button class="boton-academia" onclick="importarJSON()">
+            IMPORTAR JSON
+          </button>
+        </div>
+      </section>
+
+      <div id="modalJSON" class="modal-json" style="display: none">
+        <div class="modal-contenido">
+          <h3>Estructura del Proyecto (JSON)</h3>
+          <textarea id="codigoJSON" readonly></textarea>
+          <div class="botones-modal">
+            <button class="boton-academia" onclick="descargarJSON()">
+              DESCARGAR ARCHIVO
+            </button>
+            <button class="boton-academia" onclick="cerrarModalJSON()">
+              CERRAR
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <section
+        id="sobre-mi"
+        class="seccion-academia"
+        style="display: none; opacity: 0"
+      >
+        <header class="editorial-header">
+          <h1 class="titulo-articulo">Sobre el Autor</h1>
+          <hr class="linea-fina" />
+        </header>
+        <div class="bloque-mixto">
+          <div class="contenedor-foto izquierda">
+            <img
+              src="https://cdn.cosmos.so/14545582-7711-4775-9257-238f8f0f0891?format=webp&w=876"
+              alt="Andrea"
+            />
+          </div>
+          <div class="texto-columna">
+            <h2 class="subtitulo-editorial">Andrea Narváez Ortega</h2>
+            <p class="texto-contenido">
+              Estudiante de la carrera de Ingeniería, cursando la materia de
+              <strong>Análisis de Algoritmos</strong> en el semestre 1-2026.
+              Este proyecto busca simplificar la visualización de estructuras de
+              datos mediante una estética botánica vintage, fusionando la
+              ciencia computacional con el arte clásico.
+            </p>
+          </div>
         </div>
       </section>
     </main>
+
+    <footer class="autor-footer">
+      <hr class="nav-divider" />
+      <p>Desarrollado por: <strong>Andrea Narváez Ortega</strong></p>
+      <p>Análisis de Algoritmos - 1-2026</p>
+    </footer>
 
     <script src="script.js"></script>
   </body>
