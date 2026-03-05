@@ -87,37 +87,46 @@ function inicializarCanvas() {
     dibujar();
   });
 
-  // CLIC DERECHO: Borrar Nodos o Líneas (¡SOLUCIÓN LAPTOP!)
+  // CLIC DERECHO: Editar (Normal) o Borrar (Con Ctrl)
   canvas.addEventListener("mousedown", (e) => {
     if (e.button !== 2) return; // Solo clic derecho
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // 1. Intentar borrar nodo
+    // 1. BUSCAR NODO
     const nodoIndex = nodos.findIndex((n) => Math.hypot(n.x - x, n.y - y) < 25);
+
     if (nodoIndex !== -1) {
-      const nodoABorrar = nodos[nodoIndex];
-      nodos.splice(nodoIndex, 1);
-      aristas = aristas.filter(
-        (a) => a.desde !== nodoABorrar && a.hacia !== nodoABorrar,
-      );
+      if (e.ctrlKey) {
+        // BORRAR SI PRESIONA CTRL
+        const nodoABorrar = nodos[nodoIndex];
+        nodos.splice(nodoIndex, 1);
+        aristas = aristas.filter(
+          (a) => a.desde !== nodoABorrar && a.hacia !== nodoABorrar,
+        );
+      } else {
+        // EDITAR SI ES CLIC DERECHO SOLO
+        const nuevoNombre = prompt(
+          "Nuevo nombre para el nodo:",
+          nodos[nodoIndex].label,
+        );
+        if (nuevoNombre) nodos[nodoIndex].label = nuevoNombre.toUpperCase();
+      }
       dibujar();
+      generarMatrizDinamica(); // Actualiza la tabla automáticamente
       return;
     }
 
-    // 2. Intentar borrar arista (detectando cercanía al peso/centro)
+    // 2. BUSCAR ARISTA (Cerca del peso/centro)
     const aristaIndex = aristas.findIndex((a) => {
       let midX, midY;
       if (a.desde === a.hacia) {
-        // Auto-bucle
         midX = a.desde.x;
         midY = a.desde.y - 45;
       } else {
-        // Punto medio aproximado para aristas rectas y curvas
         midX = (a.desde.x + a.hacia.x) / 2;
         midY = (a.desde.y + a.hacia.y) / 2;
-        // Si es curva, el peso está un poco desplazado
         const hayInversa = aristas.some(
           (r) => r.desde === a.hacia && r.hacia === a.desde && r !== a,
         );
@@ -130,16 +139,26 @@ function inicializarCanvas() {
           midY += Math.sin(angle + Math.PI / 2) * 25;
         }
       }
-      return Math.hypot(x - midX, y - midY) < 20; // Hitbox más grande
+      return Math.hypot(x - midX, y - midY) < 20;
     });
 
     if (aristaIndex !== -1) {
-      aristas.splice(aristaIndex, 1);
+      if (e.ctrlKey) {
+        // BORRAR SI PRESIONA CTRL
+        aristas.splice(aristaIndex, 1);
+      } else {
+        // EDITAR SI ES CLIC DERECHO SOLO
+        const nuevoPeso = prompt(
+          "Nuevo peso para la arista:",
+          aristas[aristaIndex].peso,
+        );
+        if (nuevoPeso !== null)
+          aristas[aristaIndex].peso = parseInt(nuevoPeso) || 0;
+      }
       dibujar();
+      generarMatrizDinamica(); // Actualiza la tabla automáticamente
     }
   });
-
-  dibujar();
 }
 
 /* =========================================
