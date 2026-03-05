@@ -213,6 +213,25 @@ body {
   color: #9a7e6f;
 }
 
+.lista-elegante {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.lista-elegante li {
+  position: relative;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.lista-elegante li::before {
+  content: "◈"; /* El rombo que tenías */
+  color: #9a7e6f;
+  position: absolute;
+  left: -25px;
+  font-size: 1.2rem;
+}
+
 /* BOTÓN CENTRADO */
 .contenedor-boton {
   width: 100%;

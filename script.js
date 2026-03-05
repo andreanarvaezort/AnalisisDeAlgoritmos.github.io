@@ -271,24 +271,71 @@ function exportarJSON() {
   a.click();
 }
 
+/* =========================================
+    MODAL Y JSON (FUNCIONES COMPLETAS)
+   ========================================= */
+
+function abrirModalJSON() {
+  // Generar el texto JSON de los nodos y aristas actuales
+  const data = JSON.stringify({ nodos, aristas }, null, 4);
+  const textarea = document.getElementById("codigoJSON");
+  const modal = document.getElementById("modalJSON");
+
+  if (textarea && modal) {
+    textarea.value = data;
+    modal.style.display = "flex"; // Usamos flex para centrarlo
+  }
+}
+
+function cerrarModalJSON() {
+  document.getElementById("modalJSON").style.display = "none";
+}
+
+function descargarJSON() {
+  const data = document.getElementById("codigoJSON").value;
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "grafo_academia.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function importarJSON() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = ".json";
+
   input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const aux = JSON.parse(ev.target.result);
-      nodos = aux.nodos;
-      aristas = aux.aristas.map((a) => ({
-        desde: nodos.find((n) => n.id === a.desde.id),
-        hacia: nodos.find((n) => n.id === a.hacia.id),
-        peso: a.peso,
-      }));
-      dibujar();
-      alert("¡Grafo importado!");
+      try {
+        const aux = JSON.parse(ev.target.result);
+        // Validamos que los datos existan
+        if (!aux.nodos || !aux.aristas) throw new Error("Formato inválido");
+
+        nodos = aux.nodos;
+        // Re-vinculamos las referencias de memoria de las aristas a los nuevos nodos
+        aristas = aux.aristas.map((a) => ({
+          desde: nodos.find((n) => n.id === a.desde.id),
+          hacia: nodos.find((n) => n.id === a.hacia.id),
+          peso: a.peso,
+        }));
+
+        dibujar();
+        alert("¡Grafo importado con éxito!");
+      } catch (err) {
+        alert(
+          "Error al importar: Asegúrate de que sea un archivo JSON de este simulador.",
+        );
+        console.error(err);
+      }
     };
-    reader.readAsText(e.target.files[0]);
+    reader.readAsText(file);
   };
   input.click();
 }
