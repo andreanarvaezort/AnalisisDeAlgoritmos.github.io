@@ -1,7 +1,6 @@
-/**
- * Cambia la visibilidad de las secciones con un efecto suave de desvanecimiento.
- * @param {string} id - El ID de la sección que queremos mostrar (ej. 'teoria' o 'grafos').
- */
+/* =========================================
+    ESTADO Y NAVEGACIÓN
+   ========================================= */
 let canvas, ctx;
 let nodos = [];
 let aristas = [];
@@ -11,9 +10,7 @@ function mostrarSeccion(id) {
   const secciones = document.querySelectorAll(".seccion-academia");
   secciones.forEach((s) => {
     s.style.opacity = "0";
-    setTimeout(() => {
-      s.style.display = "none";
-    }, 500);
+    setTimeout(() => (s.style.display = "none"), 500);
   });
 
   setTimeout(() => {
@@ -23,149 +20,209 @@ function mostrarSeccion(id) {
       setTimeout(() => {
         destino.style.opacity = "1";
         if (id === "grafos") inicializarCanvas();
+        if (id === "matriz") generarMatrizDinamica();
       }, 50);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, 550);
 }
-
+/* =========================================
+    SISTEMA DE GRAFOS (INTERACCIÓN MEJORADA)
+   ========================================= */
 function inicializarCanvas() {
   canvas = document.getElementById("canvasGrafos");
   if (!canvas) return;
-  ctx = canvas.getContext("2d");
+
   const contenedor = canvas.parentElement;
   canvas.width = contenedor.clientWidth;
   canvas.height = contenedor.clientHeight;
 
-  canvas.replaceWith(canvas.cloneNode(true));
-  canvas = document.getElementById("canvasGrafos");
+  const nuevoCanvas = canvas.cloneNode(true);
+  canvas.replaceWith(nuevoCanvas);
+  canvas = nuevoCanvas;
   ctx = canvas.getContext("2d");
 
+  // DESACTIVAR MENÚ DEL NAVEGADOR (Para usar click derecho)
+  canvas.oncontextmenu = (e) => e.preventDefault();
+
+  // DOBLE CLIC IZQUIERDO: Crear Nodo
   canvas.addEventListener("dblclick", (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const nombre = prompt("Nombre del nodo:", "Nodo " + (nodos.length + 1));
+    const nombre = prompt(
+      "Nombre del nodo:",
+      String.fromCharCode(65 + nodos.length),
+    );
     if (nombre) {
-      nodos.push({ x, y, label: nombre });
+      nodos.push({ x, y, label: nombre.toUpperCase(), id: Date.now() });
       dibujar();
     }
   });
 
+  // CLIC IZQUIERDO: Seleccionar y Conectar
   canvas.addEventListener("mousedown", (e) => {
+    if (e.button !== 0) return; // Solo clic izquierdo
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const nodo = nodos.find((n) => Math.hypot(n.x - x, n.y - y) < 25);
+    const nodoBajoMouse = nodos.find((n) => Math.hypot(n.x - x, n.y - y) < 25);
 
-    if (nodo) {
-      if (e.shiftKey) {
-        nodos = nodos.filter((n) => n !== nodo);
-        aristas = aristas.filter((a) => a.desde !== nodo && a.hacia !== nodo);
-        nodoSeleccionado = null;
+    if (nodoBajoMouse) {
+      if (!nodoSeleccionado) {
+        nodoSeleccionado = nodoBajoMouse;
       } else {
-        if (!nodoSeleccionado) {
-          nodoSeleccionado = nodo;
-        } else {
-          const peso = prompt("Peso de la conexión:", "1");
-          if (peso !== null) {
-            aristas.push({ desde: nodoSeleccionado, hacia: nodo, peso: peso });
-          }
-          nodoSeleccionado = null;
+        const peso = prompt("Peso:", "1");
+        if (peso !== null) {
+          aristas.push({
+            desde: nodoSeleccionado,
+            hacia: nodoBajoMouse,
+            peso: parseInt(peso) || 0,
+          });
         }
+        nodoSeleccionado = null;
       }
-      dibujar();
     } else {
       nodoSeleccionado = null;
+    }
+    dibujar();
+  });
+
+  // CLIC DERECHO: Borrar Nodos o Líneas (¡SOLUCIÓN LAPTOP!)
+  canvas.addEventListener("mousedown", (e) => {
+    if (e.button !== 2) return; // Solo clic derecho
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // 1. Intentar borrar nodo
+    const nodoIndex = nodos.findIndex((n) => Math.hypot(n.x - x, n.y - y) < 25);
+    if (nodoIndex !== -1) {
+      const nodoABorrar = nodos[nodoIndex];
+      nodos.splice(nodoIndex, 1);
+      aristas = aristas.filter(
+        (a) => a.desde !== nodoABorrar && a.hacia !== nodoABorrar,
+      );
+      dibujar();
+      return;
+    }
+
+    // 2. Intentar borrar arista (detectando cercanía al peso/centro)
+    const aristaIndex = aristas.findIndex((a) => {
+      let midX, midY;
+      if (a.desde === a.hacia) {
+        // Auto-bucle
+        midX = a.desde.x;
+        midY = a.desde.y - 45;
+      } else {
+        // Punto medio aproximado para aristas rectas y curvas
+        midX = (a.desde.x + a.hacia.x) / 2;
+        midY = (a.desde.y + a.hacia.y) / 2;
+        // Si es curva, el peso está un poco desplazado
+        const hayInversa = aristas.some(
+          (r) => r.desde === a.hacia && r.hacia === a.desde && r !== a,
+        );
+        if (hayInversa) {
+          const angle = Math.atan2(
+            a.hacia.y - a.desde.y,
+            a.hacia.x - a.desde.x,
+          );
+          midX += Math.cos(angle + Math.PI / 2) * 25;
+          midY += Math.sin(angle + Math.PI / 2) * 25;
+        }
+      }
+      return Math.hypot(x - midX, y - midY) < 20; // Hitbox más grande
+    });
+
+    if (aristaIndex !== -1) {
+      aristas.splice(aristaIndex, 1);
       dibujar();
     }
   });
+
   dibujar();
 }
 
-function dibujarFlechaCurva(a) {
-  const { desde, hacia, peso } = a;
-  const radio = 20;
-
-  ctx.strokeStyle = "#9a7e6f";
-  ctx.fillStyle = "#9a7e6f";
-  ctx.lineWidth = 2;
-
-  if (desde === hacia) {
-    ctx.beginPath();
-    ctx.arc(desde.x, desde.y - 30, 20, 0, Math.PI * 2);
-    ctx.stroke();
-    dibujarPunta(desde.x + 15, desde.y - 15, Math.PI / 2);
-    ctx.fillText(peso, desde.x, desde.y - 55);
-    return;
-  }
-
-  const inversa = aristas.find(
-    (ari) => ari.desde === hacia && ari.hacia === desde,
-  );
-  const dist = Math.hypot(hacia.x - desde.x, hacia.y - desde.y);
-  const angle = Math.atan2(hacia.y - desde.y, hacia.x - desde.x);
-
-  ctx.beginPath();
-  let cpX, cpY, targetX, targetY;
-
-  if (inversa) {
-    const curve = 30;
-    cpX = (desde.x + hacia.x) / 2 + curve * Math.cos(angle - Math.PI / 2);
-    cpY = (desde.y + hacia.y) / 2 + curve * Math.sin(angle - Math.PI / 2);
-
-    ctx.moveTo(desde.x, desde.y);
-    ctx.quadraticCurveTo(cpX, cpY, hacia.x, hacia.y);
-    ctx.stroke();
-
-    const t = 0.8;
-    targetX =
-      Math.pow(1 - t, 2) * desde.x +
-      2 * (1 - t) * t * cpX +
-      Math.pow(t, 2) * hacia.x;
-    targetY =
-      Math.pow(1 - t, 2) * desde.y +
-      2 * (1 - t) * t * cpY +
-      Math.pow(t, 2) * hacia.y;
-
-    ctx.fillText(peso, cpX, cpY);
-  } else {
-    const tx = hacia.x - radio * Math.cos(angle);
-    const ty = hacia.y - radio * Math.sin(angle);
-    ctx.moveTo(desde.x, desde.y);
-    ctx.lineTo(tx, ty);
-    ctx.stroke();
-    targetX = tx;
-    targetY = ty;
-    ctx.fillText(peso, (desde.x + hacia.x) / 2, (desde.y + hacia.y) / 2 - 10);
-  }
-
-  dibujarPunta(targetX, targetY, angle);
-}
-
-function dibujarPunta(x, y, angulo) {
-  const tamaño = 10;
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(
-    x - tamaño * Math.cos(angulo - Math.PI / 6),
-    y - tamaño * Math.sin(angulo - Math.PI / 6),
-  );
-  ctx.lineTo(
-    x - tamaño * Math.cos(angulo + Math.PI / 6),
-    y - tamaño * Math.sin(angulo + Math.PI / 6),
-  );
-  ctx.closePath();
-  ctx.fill();
-}
-
+/* =========================================
+    MOTOR DE DIBUJO (GEOMETRÍA CORREGIDA)
+   ========================================= */
 function dibujar() {
+  if (!ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "bold 14px Spectral";
-  ctx.textAlign = "center";
 
-  aristas.forEach((a) => dibujarFlechaCurva(a));
+  aristas.forEach((a) => {
+    const { desde, hacia, peso } = a;
+    const esSelf = desde === hacia;
+    const hayInversa = aristas.some(
+      (r) => r.desde === hacia && r.hacia === desde && r !== a,
+    );
+    const radioNodo = 20;
 
+    ctx.strokeStyle = "#9a7e6f";
+    ctx.fillStyle = "#9a7e6f";
+    ctx.lineWidth = 2;
+
+    if (esSelf) {
+      // AUTO-BUCLE: Arco en la parte superior
+      const loopX = desde.x;
+      const loopY = desde.y - 25;
+      const loopR = 15;
+      ctx.beginPath();
+      ctx.arc(loopX, loopY, loopR, Math.PI * 0.2, Math.PI * 0.8, true);
+      ctx.stroke();
+
+      // Punta de flecha del auto-bucle
+      const endX = loopX + loopR * Math.cos(Math.PI * 0.8);
+      const endY = loopY + loopR * Math.sin(Math.PI * 0.8);
+      dibujarPunta(endX, endY, Math.PI * 1.4);
+
+      ctx.fillStyle = "#2d2926";
+      ctx.fillText(peso, loopX, loopY - 20);
+    } else {
+      const angle = Math.atan2(hacia.y - desde.y, hacia.x - desde.x);
+      if (hayInversa) {
+        // ARISTAS CURVAS (BIDIRECCIONAL)
+        const cpX =
+          (desde.x + hacia.x) / 2 + Math.cos(angle + Math.PI / 2) * 35;
+        const cpY =
+          (desde.y + hacia.y) / 2 + Math.sin(angle + Math.PI / 2) * 35;
+
+        ctx.beginPath();
+        ctx.moveTo(desde.x, desde.y);
+        ctx.quadraticCurveTo(
+          cpX,
+          cpY,
+          hacia.x - radioNodo * Math.cos(angle),
+          hacia.y - radioNodo * Math.sin(angle),
+        );
+        ctx.stroke();
+
+        dibujarPunta(
+          hacia.x - radioNodo * Math.cos(angle),
+          hacia.y - radioNodo * Math.sin(angle),
+          angle,
+        );
+        ctx.fillStyle = "#2d2926";
+        ctx.fillText(peso, cpX, cpY);
+      } else {
+        // ARISTAS RECTAS
+        const tx = hacia.x - radioNodo * Math.cos(angle);
+        const ty = hacia.y - radioNodo * Math.sin(angle);
+        ctx.beginPath();
+        ctx.moveTo(desde.x, desde.y);
+        ctx.lineTo(tx, ty);
+        ctx.stroke();
+        dibujarPunta(tx, ty, angle);
+        ctx.fillStyle = "#2d2926";
+        ctx.fillText(
+          peso,
+          (desde.x + hacia.x) / 2,
+          (desde.y + hacia.y) / 2 - 10,
+        );
+      }
+    }
+  });
+
+  // Dibujar Nodos
   nodos.forEach((n) => {
     ctx.beginPath();
     ctx.arc(n.x, n.y, 20, 0, Math.PI * 2);
@@ -174,12 +231,129 @@ function dibujar() {
     ctx.strokeStyle = "#2d2926";
     ctx.stroke();
     ctx.fillStyle = "#2d2926";
+    ctx.textAlign = "center";
+    ctx.font = "bold 12px Spectral";
     ctx.fillText(n.label, n.x, n.y + 5);
   });
 }
 
+function dibujarPunta(x, y, angulo) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angulo);
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(-10, -5);
+  ctx.lineTo(-10, 5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+/* =========================================
+    MATRIZ Y JSON (RESTAURADOS)
+   ========================================= */
 function limpiarLienzo() {
-  nodos = [];
-  aristas = [];
-  dibujar();
+  if (confirm("¿Borrar todo el trabajo?")) {
+    nodos = [];
+    aristas = [];
+    dibujar();
+  }
+}
+
+function exportarJSON() {
+  const data = JSON.stringify({ nodos, aristas });
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "grafo.json";
+  a.click();
+}
+
+function importarJSON() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  input.onchange = (e) => {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const aux = JSON.parse(ev.target.result);
+      nodos = aux.nodos;
+      aristas = aux.aristas.map((a) => ({
+        desde: nodos.find((n) => n.id === a.desde.id),
+        hacia: nodos.find((n) => n.id === a.hacia.id),
+        peso: a.peso,
+      }));
+      dibujar();
+      alert("¡Grafo importado!");
+    };
+    reader.readAsText(e.target.files[0]);
+  };
+  input.click();
+}
+
+function generarMatrizDinamica() {
+  const contenedor = document.getElementById("renderMatriz");
+  const n = nodos.length;
+  if (n === 0) return;
+
+  let matriz = Array(n)
+    .fill(0)
+    .map(() => Array(n).fill(0));
+  aristas.forEach((a) => {
+    const i = nodos.indexOf(a.desde);
+    const j = nodos.indexOf(a.hacia);
+    matriz[i][j] = a.peso;
+  });
+
+  let sumaF = [],
+    countF = [],
+    sumaC = new Array(n).fill(0),
+    countC = new Array(n).fill(0);
+  let html = `<table class="tabla-matriz"><thead><tr><th>Nodos</th>`;
+  nodos.forEach((nod) => (html += `<th>${nod.label}</th>`));
+  html += `<th>Σ Filas</th><th>Count</th></tr></thead><tbody>`;
+
+  for (let i = 0; i < n; i++) {
+    let sf = 0,
+      cf = 0;
+    html += `<tr><th>${nodos[i].label}</th>`;
+    for (let j = 0; j < n; j++) {
+      let v = matriz[i][j];
+      html += `<td>${v || ""}</td>`;
+      sf += v;
+      sumaC[j] += v;
+      if (v !== 0) {
+        cf++;
+        countC[j]++;
+      }
+    }
+    sumaF.push(sf);
+    countF.push(cf);
+    html += `<td class="texto-rojo">${sf}</td><td class="texto-naranja">${cf}</td></tr>`;
+  }
+
+  // Filas de totales de columnas
+  html += `<tr><th class="texto-rojo">Σ Col</th>`;
+  sumaC.forEach((s) => (html += `<td class="texto-rojo">${s}</td>`));
+  html += `<td>-</td><td>-</td></tr>`;
+
+  html += `<tr><th class="texto-naranja">Count Col</th>`;
+  countC.forEach((c) => (html += `<td class="texto-naranja">${c}</td>`));
+  html += `<td>-</td><td>-</td></tr></tbody></table>`;
+
+  // Estadísticas
+  html += `
+    <div class="stats-grid">
+        <div class="caja-info">
+            <p class="texto-rojo">Máx Suma Filas: ${Math.max(...sumaF)}</p>
+            <p class="texto-rojo">Máx Suma Col: ${Math.max(...sumaC)}</p>
+        </div>
+        <div class="caja-info">
+            <p class="texto-naranja">Máx Conteo Filas: ${Math.max(...countF)}</p>
+            <p class="texto-naranja">Máx Conteo Col: ${Math.max(...countC)}</p>
+        </div>
+    </div>`;
+  contenedor.innerHTML = html;
 }
