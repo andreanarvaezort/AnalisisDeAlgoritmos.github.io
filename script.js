@@ -277,6 +277,9 @@ function limpiarLienzo() {
     nodos = [];
     aristas = [];
     dibujar();
+
+    const contenedor = document.getElementById("renderMatriz");
+    if (contenedor) contenedor.innerHTML = "";
   }
 }
 
@@ -312,12 +315,22 @@ function cerrarModalJSON() {
 
 function descargarJSON() {
   const data = document.getElementById("codigoJSON").value;
+
+  let nombre = prompt("Nombre del archivo:", "grafo");
+  if (!nombre) nombre = "grafo";
+
+  if (!nombre.endsWith(".json")) {
+    nombre += ".json";
+  }
+
   const blob = new Blob([data], { type: "application/json" });
   const url = URL.createObjectURL(blob);
+
   const a = document.createElement("a");
   a.href = url;
-  a.download = "grafo_academia.json";
+  a.download = nombre;
   a.click();
+
   URL.revokeObjectURL(url);
 }
 
@@ -331,14 +344,17 @@ function importarJSON() {
     if (!file) return;
 
     const reader = new FileReader();
+
     reader.onload = (ev) => {
       try {
         const aux = JSON.parse(ev.target.result);
-        // Validamos que los datos existan
-        if (!aux.nodos || !aux.aristas) throw new Error("Formato inválido");
+
+        if (!aux.nodos || !aux.aristas) {
+          throw new Error("Formato inválido");
+        }
 
         nodos = aux.nodos;
-        // Re-vinculamos las referencias de memoria de las aristas a los nuevos nodos
+
         aristas = aux.aristas.map((a) => ({
           desde: nodos.find((n) => n.id === a.desde.id),
           hacia: nodos.find((n) => n.id === a.hacia.id),
@@ -346,16 +362,19 @@ function importarJSON() {
         }));
 
         dibujar();
-        alert("¡Grafo importado con éxito!");
+
+        generarMatrizDinamica();
+
+        alert("¡Grafo importado correctamente!");
       } catch (err) {
-        alert(
-          "Error al importar: Asegúrate de que sea un archivo JSON de este simulador.",
-        );
+        alert("Error al importar el archivo JSON.");
         console.error(err);
       }
     };
+
     reader.readAsText(file);
   };
+
   input.click();
 }
 
